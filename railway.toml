@@ -1,0 +1,8 @@
+[build]
+builder = "docker"
+dockerfilePath = "./RailwayDeployement/Dockerfile"
+
+[deploy]
+startCommand = "./RailwayDeployement"
+restartPolicyType = "always"
+healthCheckPath = "/health"
