@@ -1,0 +1,59 @@
+﻿using RailwayDeployement.Models;
+
+namespace RailwayDeployement.Service
+{
+    public class OmnisendService
+    {
+        private readonly HttpClient _httpClient;
+        private readonly OmnisendConfig _config;
+
+        public OmnisendService(HttpClient httpClient, OmnisendConfig config)
+        {
+            _httpClient = httpClient;
+            _config = config;
+            _httpClient.BaseAddress = new Uri(_config.BaseUrl);
+            _httpClient.DefaultRequestHeaders.Add("X-API-KEY", _config.ApiKey);
+        }
+
+        public async Task<(bool ok, string message)> SendStartedCheckoutAsync(StartedCheckoutEventModel model)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("events", model);
+                var body = await response.Content.ReadAsStringAsync();
+                return (response.IsSuccessStatusCode, body);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
+        public async Task<(bool ok, string message)> CreateContactAsync(OmnisendContactModel model)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("contacts", model);
+                var body = await response.Content.ReadAsStringAsync();
+                return (response.IsSuccessStatusCode, body);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
+
+        public async Task<(bool ok, string message)> CreateCustomerContactAsync(CustomerModel model)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("contacts", model);
+                var body = await response.Content.ReadAsStringAsync();
+                return (response.IsSuccessStatusCode, body);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
+    }
+}
